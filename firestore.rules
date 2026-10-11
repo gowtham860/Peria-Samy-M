@@ -1,0 +1,80 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isValidTimestamp(val) {
+      return val is timestamp || val is string;
+    }
+
+    // User profile document
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId)
+        && request.resource.data.keys().hasAll(['email', 'createdAt'])
+        && request.resource.data.email is string;
+      allow update: if isOwner(userId)
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['email', 'createdAt']));
+      allow delete: if isOwner(userId);
+
+      // Learning Plans subcollection
+      match /plans/{planId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasAll(['title', 'targetSkill', 'proficiencyLevel', 'durationWeeks', 'status'])
+          && request.resource.data.title is string
+          && request.resource.data.durationWeeks is number
+          && request.resource.data.durationWeeks > 0
+          && request.resource.data.durationWeeks <= 52;
+        allow update: if isOwner(userId);
+        allow delete: if isOwner(userId);
+
+        // Plan Tasks subcollection
+        match /tasks/{taskId} {
+          allow read: if isOwner(userId);
+          allow create, update: if isOwner(userId)
+            && request.resource.data.title is string
+            && request.resource.data.title.size() > 0
+            && request.resource.data.title.size() <= 200
+            && request.resource.data.completed is bool;
+          allow delete: if isOwner(userId);
+        }
+      }
+
+      // Quiz Attempts subcollection
+      match /quizAttempts/{attemptId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId)
+          && request.resource.data.score is number
+          && request.resource.data.totalQuestions is number
+          && request.resource.data.topic is string;
+        allow update: if false; // Quiz attempts are immutable once submitted
+        allow delete: if isOwner(userId);
+      }
+
+      // Study Sessions subcollection
+      match /studySessions/{sessionId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId)
+          && request.resource.data.durationMinutes is number
+          && request.resource.data.durationMinutes > 0;
+        allow update: if isOwner(userId);
+        allow delete: if isOwner(userId);
+      }
+    }
+
+    // Default deny all other paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

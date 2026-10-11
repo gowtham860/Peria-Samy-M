@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="User Profile, Career Readiness & Account Settings — SkillPath AI">
+  <title>Profile & Career Readiness — SkillPath AI</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <div class="app-wrapper">
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="sidebar-logo">
+          <img src="assets/logo.svg" alt="SkillPath AI" style="height:36px;">
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="planner.html" class="nav-item">
+          <i data-lucide="map"></i>
+          <span>Roadmap Planner</span>
+        </a>
+        <a href="assistant.html" class="nav-item">
+          <i data-lucide="bot"></i>
+          <span>AI Tutor Assistant</span>
+        </a>
+        <a href="quizzes.html" class="nav-item">
+          <i data-lucide="award"></i>
+          <span>Adaptive Quizzes</span>
+        </a>
+        <a href="resources.html" class="nav-item">
+          <i data-lucide="library"></i>
+          <span>Resources & Projects</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+          <i data-lucide="briefcase"></i>
+          <span>Profile & Career</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div style="display:flex; align-items:center; gap:0.65rem;">
+          <div class="user-avatar">SP</div>
+          <div style="font-size:0.85rem; line-height:1.2;">
+            <strong class="user-display-name">Learner</strong>
+            <div class="user-email" style="font-size:0.75rem; color:var(--text-muted);">learner@example.com</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" data-action="logout" title="Sign out" aria-label="Sign out">
+          <i data-lucide="log-out"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      <header class="app-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" aria-label="Toggle navigation drawer">
+            <i data-lucide="menu"></i>
+          </button>
+          <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; color:var(--text-muted);">
+            <a href="dashboard.html" style="color:var(--text-muted);">App</a>
+            <span>/</span>
+            <strong style="color:var(--text-main);">Profile & Settings</strong>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <button class="theme-toggle-btn" aria-label="Toggle Theme">
+            <i data-lucide="moon"></i>
+          </button>
+          <a href="profile.html" class="user-menu" title="User Profile">
+            <div class="user-avatar">SP</div>
+          </a>
+        </div>
+      </header>
+
+      <div class="page-content container-narrow">
+        <div class="page-header">
+          <h1 class="page-title">Profile & Career Readiness</h1>
+          <p class="page-subtitle">Manage your account preferences, assess your skill gaps, and prepare for industry interviews.</p>
+        </div>
+
+        <!-- Section 1: User Profile Settings -->
+        <div class="card" style="margin-bottom:2rem;">
+          <div class="card-header">
+            <strong style="font-size:1rem;">Account Profile & Preferences</strong>
+          </div>
+          <div class="card-body">
+            <form id="profile-form">
+              <div class="form-group">
+                <label class="form-label" for="profile-display-name">Display Name</label>
+                <input type="text" id="profile-display-name" class="form-control" value="Learner">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="profile-email">Email Address</label>
+                <input type="email" id="profile-email" class="form-control" value="learner@example.com" disabled style="background:var(--bg-subtle); cursor:not-allowed;">
+                <div class="form-hint">Email address is managed through Firebase Authentication.</div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="profile-preferred-language">Default Language</label>
+                <select id="profile-preferred-language" class="form-select">
+                  <option value="english" selected>English</option>
+                  <option value="tamil">Tamil (தமிழ்)</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-sm">
+                <i data-lucide="save"></i>
+                <span>Save Preferences</span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Section 2: Career Readiness Module -->
+        <div class="card" style="margin-bottom:2rem;">
+          <div class="card-header">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <i data-lucide="briefcase" style="color:var(--primary-500); width:18px; height:18px;"></i>
+              <strong style="font-size:1rem;">Career-Readiness & Job Preparation</strong>
+            </div>
+            <span class="badge badge-primary">Self-Assessment</span>
+          </div>
+          <div class="card-body">
+            <!-- Skill Gap Assessment Checklist -->
+            <h3 style="font-size:1.05rem; font-weight:700; margin-bottom:0.75rem;">Full-Stack Engineer Readiness Checklist</h3>
+            <div style="display:flex; flex-direction:column; gap:0.65rem; margin-bottom:1.5rem;">
+              <label style="display:flex; align-items:center; gap:0.65rem; font-size:0.9rem; cursor:pointer;">
+                <input type="checkbox" checked style="accent-color:var(--primary-600); width:16px; height:16px;">
+                <span>Semantic HTML, CSS Flexbox/Grid, Responsive Web Design</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:0.65rem; font-size:0.9rem; cursor:pointer;">
+                <input type="checkbox" checked style="accent-color:var(--primary-600); width:16px; height:16px;">
+                <span>Modern JavaScript (ES6+), Event Loop, DOM Manipulation</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:0.65rem; font-size:0.9rem; cursor:pointer;">
+                <input type="checkbox" style="accent-color:var(--primary-600); width:16px; height:16px;">
+                <span>REST API Development with Node.js & Authentication Security</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:0.65rem; font-size:0.9rem; cursor:pointer;">
+                <input type="checkbox" style="accent-color:var(--primary-600); width:16px; height:16px;">
+                <span>Database Architecture (NoSQL / SQL Schema Modeling)</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:0.65rem; font-size:0.9rem; cursor:pointer;">
+                <input type="checkbox" style="accent-color:var(--primary-600); width:16px; height:16px;">
+                <span>CI/CD Automation, Cloud Deployment & Git Collaboration</span>
+              </label>
+            </div>
+
+            <!-- Resume Tips -->
+            <div style="background:var(--bg-subtle); padding:1rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
+              <h4 style="font-size:0.95rem; font-weight:700; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.4rem;">
+                <i data-lucide="file-text" style="width:16px; height:16px; color:var(--primary-600);"></i>
+                <span>Resume & Portfolio Best Practices</span>
+              </h4>
+              <ul style="padding-left:1.25rem; font-size:0.85rem; color:var(--text-muted); display:flex; flex-direction:column; gap:0.3rem;">
+                <li>Link live deployed demos alongside GitHub repositories.</li>
+                <li>Highlight measurable outcomes (e.g. "Reduced bundle size by 35% using code splitting").</li>
+                <li>Document system architecture and design decisions in comprehensive READMEs.</li>
+              </ul>
+            </div>
+
+            <!-- Disclaimer -->
+            <div style="font-size:0.8rem; color:var(--text-muted); padding:0.5rem 0.75rem; background:rgba(245, 158, 11, 0.08); border-radius:var(--radius-sm);">
+              ⚠️ <em>Disclaimer:</em> SkillPath AI career readiness tools are self-guided educational checklists. They do not promise or guarantee employment, certification, or hiring outcomes.
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Reminders & Study Notifications -->
+        <div class="card" style="margin-bottom:2rem;">
+          <div class="card-header">
+            <strong style="font-size:1rem;">Study Reminders & Notifications</strong>
+          </div>
+          <div class="card-body">
+            <p style="font-size:0.875rem; color:var(--text-muted); margin-bottom:1rem;">
+              Receive gentle browser reminders to maintain your daily study habits and upcoming roadmap milestones.
+            </p>
+            <button id="notif-permission-btn" class="btn btn-secondary btn-sm">
+              <i data-lucide="bell"></i>
+              <span>Enable Browser Study Reminders</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section 4: Danger Zone -->
+        <div class="card" style="border-color:var(--danger-400);">
+          <div class="card-header" style="background:rgba(239, 68, 68, 0.05); color:var(--danger-600);">
+            <strong style="font-size:1rem;">Danger Zone</strong>
+          </div>
+          <div class="card-body">
+            <p style="font-size:0.875rem; color:var(--text-muted); margin-bottom:1rem;">
+              Permanently delete your SkillPath AI account and wipe all stored learning roadmaps, task progress, and quiz records. This action cannot be undone.
+            </p>
+            <button id="delete-account-btn" class="btn btn-danger btn-sm">
+              <i data-lucide="trash-2"></i>
+              <span>Delete My Account & Wipe Data</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

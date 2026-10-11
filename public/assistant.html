@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI Learning Assistant — SkillPath AI Conversational Tutor supporting English and Tamil.">
+  <title>AI Tutor Assistant — SkillPath AI</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <div class="app-wrapper">
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="sidebar-logo">
+          <img src="assets/logo.svg" alt="SkillPath AI" style="height:36px;">
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="planner.html" class="nav-item">
+          <i data-lucide="map"></i>
+          <span>Roadmap Planner</span>
+        </a>
+        <a href="assistant.html" class="nav-item active">
+          <i data-lucide="bot"></i>
+          <span>AI Tutor Assistant</span>
+        </a>
+        <a href="quizzes.html" class="nav-item">
+          <i data-lucide="award"></i>
+          <span>Adaptive Quizzes</span>
+        </a>
+        <a href="resources.html" class="nav-item">
+          <i data-lucide="library"></i>
+          <span>Resources & Projects</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+          <i data-lucide="briefcase"></i>
+          <span>Profile & Career</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div style="display:flex; align-items:center; gap:0.65rem;">
+          <div class="user-avatar">SP</div>
+          <div style="font-size:0.85rem; line-height:1.2;">
+            <strong class="user-display-name">Learner</strong>
+            <div class="user-email" style="font-size:0.75rem; color:var(--text-muted);">learner@example.com</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" data-action="logout" title="Sign out" aria-label="Sign out">
+          <i data-lucide="log-out"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      <header class="app-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" aria-label="Toggle navigation drawer">
+            <i data-lucide="menu"></i>
+          </button>
+          <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; color:var(--text-muted);">
+            <a href="dashboard.html" style="color:var(--text-muted);">App</a>
+            <span>/</span>
+            <strong style="color:var(--text-main);">AI Tutor Assistant</strong>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <!-- Tutor Controls: Language & Level -->
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <select id="chat-language-select" class="form-select" style="padding:0.35rem 0.65rem; font-size:0.85rem; width:auto;">
+              <option value="english" selected>🌐 English</option>
+              <option value="tamil">🇮🇳 தமிழ் (Tamil)</option>
+            </select>
+
+            <select id="chat-level-select" class="form-select" style="padding:0.35rem 0.65rem; font-size:0.85rem; width:auto;">
+              <option value="beginner" selected>Level: Beginner (ELI5)</option>
+              <option value="intermediate">Level: Intermediate</option>
+              <option value="advanced">Level: Advanced Deep Dive</option>
+            </select>
+          </div>
+
+          <button class="theme-toggle-btn" aria-label="Toggle Theme">
+            <i data-lucide="moon"></i>
+          </button>
+
+          <a href="profile.html" class="user-menu" title="User Profile">
+            <div class="user-avatar">SP</div>
+          </a>
+        </div>
+      </header>
+
+      <div class="page-content" style="padding-bottom:1rem;">
+        <!-- Chat Container -->
+        <div class="chat-container">
+          <div class="chat-header">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <div style="width:36px; height:36px; border-radius:var(--radius-full); background:linear-gradient(135deg, var(--primary-600), var(--secondary-500)); color:#fff; display:flex; align-items:center; justify-content:center;">
+                <i data-lucide="bot" style="width:20px; height:20px;"></i>
+              </div>
+              <div>
+                <strong style="font-size:0.95rem;">SkillPath AI Tutor</strong>
+                <div style="font-size:0.75rem; color:var(--success-500); display:flex; align-items:center; gap:0.3rem;">
+                  <span style="width:6px; height:6px; border-radius:50%; background:var(--success-500); display:inline-block;"></span>
+                  Online & Ready to Assist
+                </div>
+              </div>
+            </div>
+
+            <div style="font-size:0.785rem; color:var(--text-muted); background:var(--bg-surface); padding:0.3rem 0.65rem; border-radius:var(--radius-full); border:1px solid var(--border-light);">
+              <i data-lucide="shield-check" style="width:12px; height:12px; display:inline;"></i>
+              <span>Rate Limit: 20 req/min</span>
+            </div>
+          </div>
+
+          <!-- Suggested Quick Prompts -->
+          <div style="padding:0.75rem 1.5rem; background:var(--bg-subtle); border-bottom:1px solid var(--border-light); display:flex; gap:0.5rem; overflow-x:auto;">
+            <button class="badge prompt-chip" data-prompt="Explain JavaScript closures with an intuitive analogy" style="cursor:pointer; background:var(--bg-surface); color:var(--text-main); border:1px solid var(--border-light);">
+              💡 Explain Closures Simply
+            </button>
+            <button class="badge prompt-chip" data-prompt="How does async/await work under the hood in the event loop?" style="cursor:pointer; background:var(--bg-surface); color:var(--text-main); border:1px solid var(--border-light);">
+              ⚡ Async/Await Mechanics
+            </button>
+            <button class="badge prompt-chip" data-prompt="Give me a practical coding challenge to practice REST APIs" style="cursor:pointer; background:var(--bg-surface); color:var(--text-main); border:1px solid var(--border-light);">
+              🛠 Practice Coding Challenge
+            </button>
+            <button class="badge prompt-chip" data-prompt="விளக்குங்கள்: தரவு கட்டமைப்புகள் (Data Structures) என்றால் என்ன?" style="cursor:pointer; background:var(--bg-surface); color:var(--text-main); border:1px solid var(--border-light);">
+              🇮🇳 தமிழில் விளக்கம் (Tamil)
+            </button>
+          </div>
+
+          <!-- Messages Stream -->
+          <div id="chat-messages" class="chat-messages">
+            <div class="message-bubble message-ai">
+              <strong>Hello! I am your SkillPath AI Tutor. 👋</strong><br/>
+              I can explain difficult concepts in plain terms, provide practical coding examples, guide you through your roadmap tasks, and answer questions in both <strong>English</strong> and <strong>Tamil (தமிழ்)</strong>.<br/><br/>
+              What topic are you learning today?
+            </div>
+          </div>
+
+          <!-- Chat Input Bar -->
+          <form id="chat-form" class="chat-input-bar">
+            <input type="text" id="chat-input" class="form-control" placeholder="Ask a question about your learning topic, request an exercise, or type in Tamil..." autocomplete="off" required>
+            <button type="submit" class="btn btn-primary" style="padding:0.65rem 1.25rem;">
+              <span>Send</span>
+              <i data-lucide="send"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- Educational Disclaimer -->
+        <div style="margin-top:0.75rem; text-align:center; font-size:0.785rem; color:var(--text-muted);">
+          ⚠️ AI tutor explanations are for educational assistance. Always verify critical implementation details with official documentation.
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
