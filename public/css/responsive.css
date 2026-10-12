@@ -20,6 +20,10 @@
     --header-height: 60px;
   }
 
+  .nav-links {
+    display: none !important;
+  }
+
   .app-sidebar {
     transform: translateX(-100%);
     box-shadow: var(--shadow-xl);

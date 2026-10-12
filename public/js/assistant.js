@@ -2,11 +2,9 @@
  * SkillPath AI — Conversational AI Learning Assistant
  */
 
-import { initFirebase } from './firebase-config.js';
-import { showToast, initLucideIcons } from './ui.js';
+import { initFirebase, callBackend } from './firebase-config.js';
+import { initLucideIcons } from './ui.js';
 import { escapeHtml } from './validation.js';
-
-let messageHistory = [];
 
 export function initAssistant() {
   const chatForm = document.getElementById('chat-form');
@@ -64,7 +62,19 @@ async function handleSendMessage(question, options) {
     const { functions, isDemoMode } = await initFirebase();
     let responseText = '';
 
-    if (!isDemoMode && functions) {
+    // 1. Try local backend first
+    const backendRes = await callBackend('explainTopic', {
+      topic: question.slice(0, 50),
+      question: question,
+      level: options.level,
+      language: options.language
+    });
+    if (backendRes?.explanation) {
+      responseText = backendRes.explanation;
+    }
+
+    // 2. Try Firebase Functions if live and configured
+    if (!responseText && !isDemoMode && functions) {
       try {
         const { httpsCallable } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js');
         const explainTopicFn = httpsCallable(functions, 'explainTopic');
@@ -80,6 +90,7 @@ async function handleSendMessage(question, options) {
       }
     }
 
+    // 3. Fallback simulated response
     if (!responseText) {
       responseText = generateSimulatedTutorResponse(question, options);
     }

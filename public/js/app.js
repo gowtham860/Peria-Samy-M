@@ -24,19 +24,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   await initAuth();
 
   // 3. Route-specific initializers
-  const page = window.location.pathname.split('/').pop() || 'index.html';
+  const path = window.location.pathname.toLowerCase();
+  const page = path.split('/').pop() || 'index.html';
+  const isPage = (name) => page === name || page === `${name}.html` || path.endsWith(`/${name}`) || path.endsWith(`/${name}.html`);
 
-  if (page === 'dashboard.html') {
+  if (isPage('dashboard')) {
     await initDashboard();
-  } else if (page === 'planner.html') {
+  } else if (isPage('planner')) {
     initPlanner();
-  } else if (page === 'assistant.html') {
+  } else if (isPage('assistant')) {
     initAssistant();
-  } else if (page === 'quizzes.html') {
+  } else if (isPage('quizzes')) {
     initQuizzes();
-  } else if (page === 'resources.html') {
+  } else if (isPage('resources')) {
     initResources();
-  } else if (page === 'profile.html') {
+  } else if (isPage('profile')) {
     initProfilePage();
   }
 

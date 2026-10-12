@@ -108,9 +108,76 @@
           <div class="card">
             <div class="card-body">
               <form id="quiz-launcher-form">
+                <div class="form-group" style="background:var(--bg-subtle); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-light); margin-bottom:1.25rem;">
+                  <label class="form-label" for="quiz-course-catalog-select" style="font-weight:700;">
+                    🎓 Select from 50 Courses (or type custom below):
+                  </label>
+                  <select id="quiz-course-catalog-select" class="form-select" style="font-weight:600;">
+                    <option value="">-- Choose Course for Adaptive Quiz --</option>
+                    <optgroup label="1. Technology (15 Courses)">
+                      <option value="Python Programming">1. Python Programming</option>
+                      <option value="Java Programming">2. Java Programming</option>
+                      <option value="C Programming Fundamentals">3. C Programming Fundamentals</option>
+                      <option value="C++ Programming">4. C++ Programming</option>
+                      <option value="Full Stack Web Development">5. Full Stack Web Development</option>
+                      <option value="Frontend Web Development">6. Frontend Web Development</option>
+                      <option value="Backend Development with Node.js">7. Backend Development with Node.js</option>
+                      <option value="React.js Development">8. React.js Development</option>
+                      <option value="Android App Development">9. Android App Development</option>
+                      <option value="Flutter App Development">10. Flutter App Development</option>
+                      <option value="SQL and Database Management">11. SQL and Database Management</option>
+                      <option value="Git and GitHub">12. Git and GitHub</option>
+                      <option value="Cloud Computing Fundamentals">13. Cloud Computing Fundamentals</option>
+                      <option value="AWS Cloud Practitioner">14. AWS Cloud Practitioner</option>
+                      <option value="Software Testing and Automation">15. Software Testing and Automation</option>
+                    </optgroup>
+                    <optgroup label="2. AI & Data (12 Courses)">
+                      <option value="Artificial Intelligence Fundamentals">16. Artificial Intelligence Fundamentals</option>
+                      <option value="Machine Learning with Python">17. Machine Learning with Python</option>
+                      <option value="Deep Learning Fundamentals">18. Deep Learning Fundamentals</option>
+                      <option value="Generative AI Fundamentals">19. Generative AI Fundamentals</option>
+                      <option value="Prompt Engineering">20. Prompt Engineering</option>
+                      <option value="Data Analytics with Excel">21. Data Analytics with Excel</option>
+                      <option value="Data Analysis with Python">22. Data Analysis with Python</option>
+                      <option value="Data Science Fundamentals">23. Data Science Fundamentals</option>
+                      <option value="Power BI Dashboard Development">24. Power BI Dashboard Development</option>
+                      <option value="Tableau Data Visualization">25. Tableau Data Visualization</option>
+                      <option value="Natural Language Processing">26. Natural Language Processing</option>
+                      <option value="Computer Vision with OpenCV">27. Computer Vision with OpenCV</option>
+                    </optgroup>
+                    <optgroup label="3. Cybersecurity (10 Courses)">
+                      <option value="Cybersecurity Fundamentals">28. Cybersecurity Fundamentals</option>
+                      <option value="Ethical Hacking Fundamentals">29. Ethical Hacking Fundamentals</option>
+                      <option value="Network Security">30. Network Security</option>
+                      <option value="Penetration Testing Fundamentals">31. Penetration Testing Fundamentals</option>
+                      <option value="Linux for Cybersecurity">32. Linux for Cybersecurity</option>
+                      <option value="Digital Forensics">33. Digital Forensics</option>
+                      <option value="Security Operations Center (SOC) Fundamentals">34. Security Operations Center (SOC) Fundamentals</option>
+                      <option value="Web Application Security">35. Web Application Security</option>
+                      <option value="Cryptography Fundamentals">36. Cryptography Fundamentals</option>
+                      <option value="Incident Response and Threat Analysis">37. Incident Response and Threat Analysis</option>
+                    </optgroup>
+                    <optgroup label="4. Business & Career (13 Courses)">
+                      <option value="Microsoft Excel for Professionals">38. Microsoft Excel for Professionals</option>
+                      <option value="Advanced Excel and Data Reporting">39. Advanced Excel and Data Reporting</option>
+                      <option value="Office Administration">40. Office Administration</option>
+                      <option value="Business Communication Skills">41. Business Communication Skills</option>
+                      <option value="Digital Marketing Fundamentals">42. Digital Marketing Fundamentals</option>
+                      <option value="Human Resource Management">43. Human Resource Management</option>
+                      <option value="Project Management Fundamentals">44. Project Management Fundamentals</option>
+                      <option value="Business Analytics">45. Business Analytics</option>
+                      <option value="Resume Building and ATS Optimization">46. Resume Building and ATS Optimization</option>
+                      <option value="Interview Preparation for Freshers">47. Interview Preparation for Freshers</option>
+                      <option value="Spoken English and Communication">48. Spoken English and Communication</option>
+                      <option value="Aptitude and Logical Reasoning">49. Aptitude and Logical Reasoning</option>
+                      <option value="Leadership and Time Management">50. Leadership and Time Management</option>
+                    </optgroup>
+                  </select>
+                </div>
+
                 <div class="form-group">
-                  <label class="form-label" for="quiz-topic-input">Topic or Skill Area *</label>
-                  <input type="text" id="quiz-topic-input" class="form-control" placeholder="e.g., JavaScript Closures, REST APIs, SQL Queries, Docker" required value="JavaScript Closures & Async">
+                  <label class="form-label" for="quiz-topic-input">Quiz Topic / Exam Subject *</label>
+                  <input type="text" id="quiz-topic-input" class="form-control" placeholder="Select from dropdown above or enter custom topic..." required value="Full Stack Web Development">
                 </div>
 
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem;">

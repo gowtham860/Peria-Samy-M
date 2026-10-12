@@ -98,13 +98,41 @@
 
       <div class="page-content">
         <div class="page-header">
-          <span class="badge badge-primary" style="margin-bottom:0.5rem;">Curated Ecosystem</span>
-          <h1 class="page-title">Learning Resource Explorer & Project Labs</h1>
-          <p class="page-subtitle">Verified official documentation, reputable tutorials, interactive platforms, and portfolio capstones.</p>
+          <span class="badge badge-primary" style="margin-bottom:0.5rem;">50 Industry-Ready Programs</span>
+          <h1 class="page-title">Course Curriculum & Resource Explorer</h1>
+          <p class="page-subtitle">Browse all 50 courses across Technology, AI & Data, Cybersecurity, and Business & Career. Select any course to instantly generate a personalized AI roadmap.</p>
         </div>
 
-        <!-- Section 1: Resource Explorer -->
+        <!-- Section 1: 50-Course Curriculum Catalog -->
+        <div style="margin-bottom:4rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+            <!-- Category Tabs -->
+            <div class="tabs" style="margin-bottom:0;">
+              <button class="tab-btn course-track-btn active" data-track="all">All Courses (50)</button>
+              <button class="tab-btn course-track-btn" data-track="Technology">Technology (15)</button>
+              <button class="tab-btn course-track-btn" data-track="AI & Data">AI & Data (12)</button>
+              <button class="tab-btn course-track-btn" data-track="Cybersecurity">Cybersecurity (10)</button>
+              <button class="tab-btn course-track-btn" data-track="Business & Career">Business & Career (13)</button>
+            </div>
+
+            <!-- Course Search -->
+            <div style="position:relative; min-width:280px;">
+              <input type="text" id="course-catalog-search" class="form-control" placeholder="Search 50 courses (e.g. Python, SOC, Excel)..." style="padding-left:2.25rem;">
+              <i data-lucide="search" style="position:absolute; left:0.75rem; top:50%; transform:translateY(-50%); width:16px; height:16px; color:var(--text-muted);"></i>
+            </div>
+          </div>
+
+          <div id="course-catalog-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:1.5rem;">
+            <!-- Rendered dynamically by resources.js -->
+          </div>
+        </div>
+
+        <!-- Section 2: Documentation & Practice Platforms -->
         <div style="margin-bottom:3.5rem;">
+          <div style="margin-bottom:1.25rem;">
+            <h2 class="heading-2">Official Documentation & Practice Platforms</h2>
+            <p style="font-size:0.9rem; color:var(--text-muted);">Trusted references, specifications, interactive tutorials, and coding sandboxes.</p>
+          </div>
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
             <!-- Category Tabs -->
             <div class="tabs" style="margin-bottom:0;">

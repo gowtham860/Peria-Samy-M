@@ -109,14 +109,19 @@ Verify all core algorithms, validation rules, and fallbacks:
 npm run test:unit
 ```
 
-### Step 3: Local Frontend Testing (VS Code Live Server or serve)
-You can test the website immediately in two ways:
-1. **VS Code Live Server**: Right-click `public/index.html` in VS Code and select **Open with Live Server**.
-2. **Local Static Server**:
+### Step 3: Run the Application (Full-Stack Frontend + Backend + Auto-Open)
+Start the unified platform server:
+
 ```powershell
-npx serve public -l 3000
+npm start
 ```
-Open [http://localhost:3000](http://localhost:3000) in Google Chrome or Microsoft Edge.
+
+This immediately:
+1. Starts the frontend and local AI backend services on **http://localhost:3000**.
+2. Automatically launches your default web browser directly to the SkillPath AI website.
+3. Automatically maps all routes directly to the platform (never showing directory index listings).
+
+*(Alternative static-only server: `npm run serve` or `npx serve public -l 3000`)*
 
 *Note: SkillPath AI includes an In-Browser Demo Mode.* You can register, generate roadmaps, chat with the tutor, take quizzes, and log study sessions immediately out-of-the-box even before connecting cloud keys!
 

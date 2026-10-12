@@ -25,9 +25,12 @@ module.exports = defineConfig({
     },
   ],
   webServer: {
-    command: 'npx serve public -l 3000',
+    command: 'node server.js',
     port: 3000,
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
+    env: {
+      NO_OPEN: '1'
+    }
   },
 });

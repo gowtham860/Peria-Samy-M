@@ -2,7 +2,7 @@
  * SkillPath AI — Adaptive Quiz System & Performance Evaluator
  */
 
-import { initFirebase, demoStore } from './firebase-config.js';
+import { initFirebase, demoStore, callBackend } from './firebase-config.js';
 import { getCurrentUser } from './auth.js';
 import { showToast, setButtonLoading, initLucideIcons } from './ui.js';
 import { escapeHtml } from './validation.js';
@@ -15,6 +15,25 @@ let secondsElapsed = 0;
 
 export function initQuizzes() {
   const launchForm = document.getElementById('quiz-launcher-form');
+  const catalogSelect = document.getElementById('quiz-course-catalog-select');
+  const topicInput = document.getElementById('quiz-topic-input');
+
+  // URL query parameter support: ?topic=Python%20Programming
+  const urlParams = new URLSearchParams(window.location.search);
+  const requestedTopic = urlParams.get('topic');
+  if (requestedTopic && topicInput) {
+    topicInput.value = requestedTopic;
+    if (catalogSelect) catalogSelect.value = requestedTopic;
+  }
+
+  if (catalogSelect && topicInput) {
+    catalogSelect.addEventListener('change', (e) => {
+      if (e.target.value) {
+        topicInput.value = e.target.value;
+      }
+    });
+  }
+
   if (launchForm) {
     launchForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -51,7 +70,14 @@ async function startQuiz() {
     const { functions, isDemoMode } = await initFirebase();
     let quizData = null;
 
-    if (!isDemoMode && functions) {
+    // 1. Try local backend first
+    const backendResult = await callBackend('generateQuiz', { topic, level, questionCount: count });
+    if (backendResult?.quiz) {
+      quizData = backendResult.quiz;
+    }
+
+    // 2. Try Firebase Functions if live
+    if (!quizData && !isDemoMode && functions) {
       try {
         const { httpsCallable } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js');
         const genQuizFn = httpsCallable(functions, 'generateQuiz');
@@ -62,6 +88,7 @@ async function startQuiz() {
       }
     }
 
+    // 3. Fallback bank
     if (!quizData) {
       quizData = getLocalFallbackQuiz(topic, level, count);
     }
@@ -228,10 +255,10 @@ async function submitQuiz() {
 }
 
 async function saveQuizAttempt(attemptData) {
-  const user = getCurrentUser();
+  const { db, isDemoMode } = await initFirebase();
+  const user = getCurrentUser() || (isDemoMode ? (demoStore.currentUser || { uid: 'demo-user-1' }) : null);
   if (!user) return;
 
-  const { db, isDemoMode } = await initFirebase();
   const attemptId = 'attempt-' + Date.now();
 
   try {

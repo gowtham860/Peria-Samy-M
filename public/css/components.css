@@ -309,6 +309,7 @@
 /* Tabs */
 .tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   border-bottom: 1px solid var(--border-light);
   margin-bottom: 1.5rem;

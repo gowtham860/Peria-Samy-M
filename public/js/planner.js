@@ -2,26 +2,72 @@
  * SkillPath AI — Learning Plan Generator Controller
  */
 
-import { initFirebase, demoStore } from './firebase-config.js';
+import { initFirebase, demoStore, callBackend } from './firebase-config.js';
 import { getCurrentUser } from './auth.js';
 import { showToast, setButtonLoading, initLucideIcons } from './ui.js';
 import { escapeHtml } from './validation.js';
+import { COURSES } from './courses-data.js';
 
 let currentPlan = null;
 
 export function initPlanner() {
   const form = document.getElementById('planner-form');
-  const quickSkillChips = document.querySelectorAll('.skill-chip');
+  const catalogSelect = document.getElementById('catalog-course-select');
   const skillInput = document.getElementById('skill-input');
+  const levelSelect = document.getElementById('level-select');
+  const durationSelect = document.getElementById('duration-select');
+  const minutesSelect = document.getElementById('minutes-select');
+  const goalInput = document.getElementById('goal-input');
 
-  // Quick skill chip buttons
-  quickSkillChips.forEach(chip => {
+  // URL query parameter support: ?course=Python%20Programming
+  const urlParams = new URLSearchParams(window.location.search);
+  const requestedCourse = urlParams.get('course');
+  if (requestedCourse) {
+    applyCourseSelection(requestedCourse);
+    if (catalogSelect) catalogSelect.value = requestedCourse;
+  }
+
+  // Catalog select change event
+  if (catalogSelect) {
+    catalogSelect.addEventListener('change', (e) => {
+      const selectedTitle = e.target.value;
+      if (selectedTitle) {
+        applyCourseSelection(selectedTitle);
+      }
+    });
+  }
+
+  // Category filter chips
+  document.querySelectorAll('.category-filter-chip').forEach(chip => {
     chip.addEventListener('click', () => {
-      quickSkillChips.forEach(c => c.classList.remove('badge-primary'));
-      chip.classList.add('badge-primary');
-      if (skillInput) skillInput.value = chip.dataset.skill;
+      const category = chip.dataset.category;
+      const optgroups = catalogSelect?.querySelectorAll('optgroup');
+      if (optgroups) {
+        optgroups.forEach(og => {
+          if (og.label.toLowerCase().includes(category.toLowerCase())) {
+            og.scrollIntoView?.();
+            const firstOption = og.querySelector('option');
+            if (firstOption && catalogSelect) {
+              catalogSelect.value = firstOption.value;
+              applyCourseSelection(firstOption.value);
+            }
+          }
+        });
+      }
     });
   });
+
+  function applyCourseSelection(courseTitle) {
+    const course = COURSES.find(c => c.title.toLowerCase() === courseTitle.toLowerCase());
+    if (skillInput) skillInput.value = course ? course.title : courseTitle;
+    if (course) {
+      if (levelSelect && course.level) levelSelect.value = course.level.toLowerCase();
+      if (durationSelect && course.weeks) durationSelect.value = String(course.weeks);
+      if (minutesSelect && course.minutes) minutesSelect.value = String(course.minutes);
+      if (goalInput) goalInput.value = `Master ${course.title} and build production portfolio projects`;
+      showToast(`Selected: ${course.title} (${course.category})`, 'info', 2500);
+    }
+  }
 
   if (form) {
     form.addEventListener('submit', async (e) => {
@@ -62,10 +108,16 @@ async function handlePlanGeneration(form) {
 
   try {
     const { functions, isDemoMode } = await initFirebase();
-
     let planData = null;
 
-    if (!isDemoMode && functions) {
+    // 1. Try local backend first
+    const backendResult = await callBackend('generateLearningPlan', formData);
+    if (backendResult?.plan) {
+      planData = backendResult.plan;
+    }
+
+    // 2. If not found and Firebase Functions is configured:
+    if (!planData && !isDemoMode && functions) {
       try {
         const { httpsCallable } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js');
         const generatePlanFn = httpsCallable(functions, 'generateLearningPlan');
@@ -76,7 +128,7 @@ async function handlePlanGeneration(form) {
       }
     }
 
-    // Fallback or demo generation
+    // 3. Fallback or demo generation
     if (!planData) {
       planData = generateLocalPlan(formData);
     }

@@ -1,9 +1,6 @@
-/**
- * SkillPath AI — Learning Resource Explorer & Project Labs
- */
-
 import { showToast, initLucideIcons } from './ui.js';
 import { escapeHtml } from './validation.js';
+import { COURSES } from './courses-data.js';
 
 export const CURATED_RESOURCES = [
   {
@@ -105,10 +102,39 @@ export const PROJECT_LABS = [
 ];
 
 export function initResources() {
+  renderCourses(COURSES);
   renderResources(CURATED_RESOURCES);
   renderProjects(PROJECT_LABS);
 
-  // Category filter tabs
+  // 1. Course Track filter tabs
+  document.querySelectorAll('.course-track-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.course-track-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const track = btn.dataset.track;
+      const filtered = track === 'all'
+        ? COURSES
+        : COURSES.filter(c => c.category.toLowerCase() === track.toLowerCase());
+      renderCourses(filtered);
+    });
+  });
+
+  // 2. Course Search Input
+  const courseSearchInput = document.getElementById('course-catalog-search');
+  if (courseSearchInput) {
+    courseSearchInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const filtered = COURSES.filter(c =>
+        c.title.toLowerCase().includes(q) ||
+        c.description.toLowerCase().includes(q) ||
+        c.tags.some(t => t.toLowerCase().includes(q))
+      );
+      renderCourses(filtered);
+    });
+  }
+
+  // 3. Documentation Category filter tabs
   document.querySelectorAll('.resource-filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.resource-filter-btn').forEach(b => b.classList.remove('active'));
@@ -122,7 +148,7 @@ export function initResources() {
     });
   });
 
-  // Resource Search Input
+  // 4. Resource Search Input
   const searchInput = document.getElementById('resource-search-input');
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
@@ -135,6 +161,68 @@ export function initResources() {
       renderResources(filtered);
     });
   }
+}
+
+function renderCourses(courses) {
+  const container = document.getElementById('course-catalog-grid');
+  if (!container) return;
+
+  if (courses.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column:1/-1; text-align:center; padding:3rem; color:var(--text-muted);">
+        <i data-lucide="search-x" style="width:36px; height:36px; margin:0 auto 1rem; opacity:0.6;"></i>
+        <p>No courses match your search criteria. Try a different query.</p>
+      </div>
+    `;
+    initLucideIcons();
+    return;
+  }
+
+  container.innerHTML = courses.map(c => {
+    const categoryBadgeClass = c.category === 'Technology'
+      ? 'badge-primary'
+      : c.category === 'AI & Data'
+      ? 'badge-primary'
+      : c.category === 'Cybersecurity'
+      ? 'badge-warning'
+      : 'badge-success';
+
+    return `
+      <div class="card card-hover">
+        <div class="card-body">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <span class="badge ${categoryBadgeClass}">${escapeHtml(c.category)}</span>
+            <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">#${c.id}</span>
+          </div>
+
+          <h3 style="font-size:1.15rem; font-weight:700; margin-bottom:0.35rem;">${escapeHtml(c.title)}</h3>
+          
+          <div style="display:flex; gap:0.5rem; margin-bottom:0.75rem; font-size:0.8rem; color:var(--text-muted);">
+            <span><strong>${c.weeks}</strong> Weeks</span>
+            <span>•</span>
+            <span><strong>${c.minutes}</strong> mins/day</span>
+            <span>•</span>
+            <span class="badge badge-sm" style="background:var(--bg-subtle); color:var(--text-main);">${escapeHtml(c.level)}</span>
+          </div>
+
+          <p style="font-size:0.875rem; color:var(--text-muted); line-height:1.5; margin-bottom:1rem;">
+            ${escapeHtml(c.description)}
+          </p>
+
+          <div style="display:flex; gap:0.35rem; flex-wrap:wrap; margin-bottom:1.25rem;">
+            ${c.tags.map(t => `<span class="badge" style="background:var(--bg-hover); font-size:0.725rem; color:var(--text-main);">#${escapeHtml(t)}</span>`).join('')}
+          </div>
+
+          <a href="planner.html?course=${encodeURIComponent(c.title)}" class="btn btn-primary btn-sm" style="width:100%;">
+            <i data-lucide="sparkles" style="width:14px; height:14px;"></i>
+            <span>Generate AI Roadmap</span>
+          </a>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  initLucideIcons();
 }
 
 function renderResources(list) {

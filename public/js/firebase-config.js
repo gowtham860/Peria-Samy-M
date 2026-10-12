@@ -6,21 +6,31 @@
 // Production / Development Firebase Web SDK credentials
 // You can replace these with your actual Firebase Project config from the Firebase Console
 export const firebaseConfig = {
-  apiKey: window.__FIREBASE_API_KEY__ || "AIzaSySkillPathMockKeyForDevelopmentOnly",
-  authDomain: window.__FIREBASE_AUTH_DOMAIN__ || "skillpath-ai-prod.firebaseapp.com",
-  projectId: window.__FIREBASE_PROJECT_ID__ || "skillpath-ai-prod",
-  storageBucket: window.__FIREBASE_STORAGE_BUCKET__ || "skillpath-ai-prod.appspot.com",
-  messagingSenderId: window.__FIREBASE_MESSAGING_SENDER_ID__ || "123456789012",
-  appAppId: window.__FIREBASE_APP_ID__ || "1:123456789012:web:abcdef1234567890"
+  apiKey: "AIzaSyCwNdshQzO3-Ss5m1M0rHUIO9T-GEIIBAA",
+  authDomain: "skillpath-ai-app.firebaseapp.com",
+  projectId: "skillpath-ai-app",
+  storageBucket: "skillpath-ai-app.firebasestorage.app",
+  messagingSenderId: "606772195309",
+  appId: "1:606772195309:web:c9ba3eab3c80b17e3c41e4",
+  measurementId: "G-X1JVB30EH5"
 };
 
 // Check if running against local emulators
-export const isEmulatorMode = window.location.hostname === 'localhost' && window.location.port === '5000';
+export const isEmulatorMode = 
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
+  (window.location.port === '5000' || window.location.port === '5001' || Boolean(window.__USE_FIREBASE_EMULATORS__));
+
+export const hasRealFirebaseConfig = Boolean(
+  window.__FIREBASE_API_KEY__ || 
+  (firebaseConfig.apiKey && 
+   !firebaseConfig.apiKey.includes('MockKey') && 
+   !firebaseConfig.apiKey.startsWith('AIzaSyCwNdshQzO3'))
+);
 
 let authInstance = null;
 let dbInstance = null;
 let functionsInstance = null;
-let isDemoMode = false;
+let isDemoMode = !hasRealFirebaseConfig && !isEmulatorMode;
 
 // Mock storage for Demo Mode when Firebase is not connected
 class LocalDemoStore {
@@ -50,11 +60,43 @@ class LocalDemoStore {
 export const demoStore = new LocalDemoStore();
 
 /**
+ * Call local backend API directly if available (e.g. running node server.js)
+ */
+export async function callBackend(endpoint, data = {}) {
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 10000);
+    const res = await fetch(`/api/${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+    if (res.ok) {
+      const json = await res.json();
+      return json.result || json;
+    }
+  } catch (e) {
+    // Local server not responding or not on same host
+  }
+  return null;
+}
+
+/**
  * Initialize Firebase services or gracefully fallback to Demo Mode
  */
 export async function initFirebase() {
   if (window.__firebaseInitialized) {
     return { auth: authInstance, db: dbInstance, functions: functionsInstance, isDemoMode };
+  }
+
+  // If using default mock key and not running emulators, activate Demo Mode immediately
+  if (!hasRealFirebaseConfig && !isEmulatorMode) {
+    isDemoMode = true;
+    window.__firebaseInitialized = true;
+    console.info('SkillPath AI running in In-Browser Demo Mode (offline local store).');
+    return { auth: null, db: null, functions: null, isDemoMode: true };
   }
 
   try {

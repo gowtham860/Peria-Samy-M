@@ -27,21 +27,23 @@ export async function fetchUserProgressData() {
   try {
     const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
     
-    // Fetch user plans
-    const plansSnap = await getDocs(collection(db, 'users', user.uid, 'plans'));
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Firestore fetch timeout')), 2500));
+    const [plansSnap, quizSnap, sessionSnap] = await Promise.race([
+      Promise.all([
+        getDocs(collection(db, 'users', user.uid, 'plans')),
+        getDocs(collection(db, 'users', user.uid, 'quizAttempts')),
+        getDocs(collection(db, 'users', user.uid, 'studySessions'))
+      ]),
+      timeoutPromise
+    ]);
+
     const plans = plansSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-    // Fetch quiz attempts
-    const quizSnap = await getDocs(collection(db, 'users', user.uid, 'quizAttempts'));
     const quizzes = quizSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-    // Fetch study sessions
-    const sessionSnap = await getDocs(collection(db, 'users', user.uid, 'studySessions'));
     const sessions = sessionSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
     return { plans, quizzes, sessions };
   } catch (err) {
-    console.warn('Error fetching Firestore progress records, using fallback:', err);
+    console.warn('Deferred Firestore progress records, using local dataset:', err);
     return getMockProgressData();
   }
 }
@@ -176,13 +178,12 @@ export function renderAnalyticsCharts(sessions = [], quizzes = []) {
  * Log a quick study session
  */
 export async function logStudySession(minutes = 30) {
-  const user = getCurrentUser();
+  const { db, isDemoMode } = await initFirebase();
+  const user = getCurrentUser() || (isDemoMode ? (demoStore.currentUser || { uid: 'demo-user-1', displayName: 'Alex Morgan' }) : null);
   if (!user) {
     showToast('Sign in to log study sessions.', 'warning');
     return;
   }
-
-  const { db, isDemoMode } = await initFirebase();
   const sessionData = {
     durationMinutes: minutes,
     sessionDate: new Date().toISOString().split('T')[0],
